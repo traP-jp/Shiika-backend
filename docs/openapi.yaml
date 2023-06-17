@@ -3,7 +3,7 @@ openapi: '3.0.2'
 info:
   title: Shiika
   description: |
-    This is a sample knoQ server.
+    This is siika
   version: 2.1.5
 
 servers:
