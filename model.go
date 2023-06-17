@@ -7,12 +7,12 @@ type User struct {
 }
 type Kaminoku struct {
 	Id      int    `json:"id,omitempty" db:"id"`
-	Content string `json:"name,omitempty" db:"name"`
+	Content string `json:"name,omitempty" db:"content"`
 	Userid  int    `json:"userid,omitempty" db:"userid"`
 }
-type Shimonoku struct {
+type Simonoku struct {
 	Id         int    `json:"id,omitempty" db:"id"`
-	Content    string `json:"name,omitempty" db:"name"`
+	Content    string `json:"name,omitempty" db:"content"`
 	KaminokuId int    `json:"kaminokuid,omitempty" db:"kaminokuid"`
 	Userid     int    `json:"userid,omitempty" db:"userid"`
 }
