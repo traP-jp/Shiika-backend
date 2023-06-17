@@ -1,6 +1,6 @@
 services:
   mysql:
-    image: kakakakakku/mysql-world-database:8.0
+    image:  mysql:8.0.28
     environment:
       MYSQL_ROOT_PASSWORD: password
       TZ: Asia/Tokyo
