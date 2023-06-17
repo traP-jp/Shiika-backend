@@ -1,11 +1,8 @@
 package main
 
 import (
-	"database/sql"
-	"errors"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"time"
 
@@ -45,21 +42,18 @@ func main() {
 
 	e := echo.New()
 
-	e.GET("/user", getUserHandler)
+	e.POST("/login", getLoginHandler)
+	e.POST("/register", getRegisterHandler)
 
+	e.GET("/kaminoku", getKaminokuHandler)
+	e.POST("/kaminoku", postKaminokuHandler)
+	e.GET("/kaminoku/:kaminoku_id", getKaminokuDetailHandler)
+
+	e.GET("/kaminoku/:kaminoku_id/simonoku", getSimonokuHandler)
+	e.POST("/kaminoku/:kaminoku_id/simonoku", postSimonokuHandler)
+	e.GET("/simonoku", getAllSimonokuHandler)
+
+	e.GET("/user/:user_id/kaminoku", getUserKaminokuHandler)
+	e.GET("/user/:user_id/simonoku", getUserSimonokuHandler)
 	e.Start(":8080")
-}
-
-func getUserHandler(c echo.Context) error {
-	cityName := c.Param("cityName")
-	fmt.Println(cityName)
-
-	var test User
-	if err := db.Get(&test, "SELECT * FROM user WHERE name='ramdos'"); errors.Is(err, sql.ErrNoRows) {
-		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("No such city Name = %s", cityName))
-	} else if err != nil {
-		log.Fatalf("DB Error: %s", err)
-	}
-
-	return c.JSON(http.StatusOK, test.Password)
 }
