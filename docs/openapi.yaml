@@ -100,7 +100,7 @@ paths:
         - simonoku(tanka)
       responses:
         '200':
-          $ref: '#/components/responses/tanka'
+          $ref: '#/components/responses/tankas'
     post:
       tags:
         - simonoku(tanka)
@@ -119,18 +119,18 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/tankas'
-  /user/{user_name}/kaminoku:
+  /user/{user_id}/kaminoku:
     parameters:
-      - $ref: '#/components/parameters/user_name'
+      - $ref: '#/components/parameters/user_id'
     get:
       tags:
         - user
       responses:
         '200':
           $ref: '#/components/responses/kaminokus'
-  /user/{user_name}/simonoku:
+  /user/{user_id}/simonoku:
     parameters:
-      - $ref: '#/components/parameters/user_name'
+      - $ref: '#/components/parameters/user_id'
     get:
       tags:
         - user
@@ -144,7 +144,7 @@ components:
     Login:
       type: object
       properties:
-        username:
+        userid:
           type: string
         password:
           type: string
@@ -163,7 +163,7 @@ components:
           format: uuid
         content:
           type: string
-        username:
+        userid:
           type: string
           
     RequestSimonoku:
@@ -171,32 +171,22 @@ components:
       properties:
         content:
           type: string
-          
-    ResponseSimonoku:
-      description: |
-        only for ResponseTanka, no api returns this 
+  
+    ResponseTanka:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        content:
-          type: string
-        kaminokuid:
-          type: string
-          format: uuid
-        username:
-          type: string
-  
-    ResponseTanka:
-      type: object
-      properties:
         kaminoku:
-          $ref: '#/components/schemas/ResponseKaminoku'
+          type: string
+        kaminokuuser:
+          type: string
         simonoku:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResponseSimonoku'
+          type: string
+        simonokuuser:
+          type: string
+        
   requestBodies:
     Login:
       description: for login
@@ -257,9 +247,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ResponseTanka'
-    
-          
-
+  
   parameters:
     session:
       name: session
@@ -276,8 +264,8 @@ components:
         type: string
         format: uuid
         
-    user_name:
-      name: user_name
+    user_id:
+      name: user_id
       in: path
       required: true
       schema:
