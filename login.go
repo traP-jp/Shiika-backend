@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func getLoginHandler(c echo.Context) error {
+func postLoginHandler(c echo.Context) error {
 	cityName := c.Param("cityName")
 	fmt.Println(cityName)
 
@@ -23,7 +23,7 @@ func getLoginHandler(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, test.Password)
 }
-func getRegisterHandler(c echo.Context) error {
+func postRegisterHandler(c echo.Context) error {
 	cityName := c.Param("cityName")
 	fmt.Println(cityName)
 

@@ -42,8 +42,8 @@ func main() {
 
 	e := echo.New()
 
-	e.POST("/login", getLoginHandler)
-	e.POST("/register", getRegisterHandler)
+	e.POST("/login", postLoginHandler)
+	e.POST("/register", postRegisterHandler)
 
 	e.GET("/kaminoku", getKaminokuHandler)
 	e.POST("/kaminoku", postKaminokuHandler)
