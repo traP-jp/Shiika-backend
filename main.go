@@ -62,14 +62,14 @@ func main() {
 
 	withLogin.GET("/kaminoku", getKaminokuHandler)
 	withLogin.POST("/kaminoku", postKaminokuHandler)
-	e.GET("/kaminoku/:kaminoku_id", getKaminokuDetailHandler)
+	withLogin.GET("/kaminoku/:kaminoku_id", getKaminokuDetailHandler)
 
-	e.GET("/kaminoku/:kaminoku_id/simonoku", getSimonokuHandler)
-	e.POST("/kaminoku/:kaminoku_id/simonoku", postSimonokuHandler)
-	e.GET("/simonoku", getAllSimonokuHandler)
+	withLogin.GET("/kaminoku/:kaminoku_id/simonoku", getSimonokuHandler)
+	withLogin.POST("/kaminoku/:kaminoku_id/simonoku", postSimonokuHandler)
+	withLogin.GET("/simonoku", getAllSimonokuHandler)
 
-	e.GET("/user/:user_id/kaminoku", getUserKaminokuHandler)
-	e.GET("/user/:user_id/simonoku", getUserSimonokuHandler)
+	withLogin.GET("/user/:user_id/kaminoku", getUserKaminokuHandler)
+	withLogin.GET("/user/:user_id/simonoku", getUserSimonokuHandler)
 	e.Start(":8080")
 }
 
