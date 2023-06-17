@@ -46,5 +46,5 @@ type SimonokuRes struct {
 
 type TankaRes struct {
 	Kaminoku KaminokuRes
-	Simonoku SimonokuRes
+	Simonoku []SimonokuRes
 }
