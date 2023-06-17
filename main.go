@@ -61,7 +61,7 @@ func main() {
 	withLogin.Use(checkLogin)
 
 	withLogin.GET("/kaminoku", getKaminokuHandler)
-	e.POST("/kaminoku", postKaminokuHandler)
+	withLogin.POST("/kaminoku", postKaminokuHandler)
 	e.GET("/kaminoku/:kaminoku_id", getKaminokuDetailHandler)
 
 	e.GET("/kaminoku/:kaminoku_id/simonoku", getSimonokuHandler)
@@ -80,7 +80,6 @@ func checkLogin(next echo.HandlerFunc) echo.HandlerFunc {
 			fmt.Println(err)
 			return c.String(http.StatusInternalServerError, "something wrong in getting session")
 		}
-
 		if sess.Values["userName"] == nil {
 			return c.String(http.StatusForbidden, "please login")
 		}

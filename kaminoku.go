@@ -35,7 +35,7 @@ func postKaminokuHandler(c echo.Context) error {
 		log.Fatalf("DB Error: %s", err)
 	}
 
-	return c.JSON(http.StatusOK, test.Password)
+	return c.String(200, c.Get("userName").(string))
 }
 func getKaminokuDetailHandler(c echo.Context) error {
 	cityName := c.Param("cityName")
