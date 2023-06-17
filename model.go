@@ -1,20 +1,23 @@
 package main
 
 type User struct {
-	Id       string `json:"id,omitempty" db:"id"`
 	Name     string `json:"name,omitempty" db:"name"`
 	Password string `json:"password,omitempty"  db:"password"`
 }
 type Kaminoku struct {
 	Id      string `json:"id,omitempty" db:"id"`
 	Content string `json:"name,omitempty" db:"content"`
-	Userid  int    `json:"userid,omitempty" db:"userid"`
+	Userid  string `json:"userid,omitempty" db:"userid"`
 }
 type Simonoku struct {
 	Id         string `json:"id,omitempty" db:"id"`
 	Content    string `json:"name,omitempty" db:"content"`
-	KaminokuId int    `json:"kaminokuid,omitempty" db:"kaminokuid"`
-	Userid     int    `json:"userid,omitempty" db:"userid"`
+	KaminokuId string `json:"kaminokuid,omitempty" db:"kaminokuid"`
+	Userid     string `json:"userid,omitempty" db:"userid"`
+}
+type LoginRequestBody struct {
+	Username string `json:"username,omitempty" form:"username"`
+	Password string `json:"password,omitempty" form:"password"`
 }
 
 // for post kaminoku's request body's binding
@@ -26,7 +29,6 @@ type KaminokuReq struct {
 type KaminokuRes struct {
 	Id       string `json:"id,omitempty"`
 	Content  string `json:"name,omitempty"`
-	Userid   int    `json:"userid,omitempty"`
 	UserName string `json:"username,omitempty"`
 }
 
@@ -35,12 +37,10 @@ type SimonokuReq struct {
 	Content string `json:"content,omitempty"`
 }
 
-//
 type SimonokuRes struct {
 	Id         string `json:"id,omitempty"`
 	Content    string `json:"name,omitempty"`
 	KaminokuId int    `json:"kaminokuid,omitempty"`
-	Userid     int    `json:"userid,omitempty"`
 	UserName   string `json:"username,omitempty"`
 }
 

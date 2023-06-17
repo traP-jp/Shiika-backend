@@ -5,16 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
 )
-
-type LoginRequestBody struct {
-	Username string `json:"username,omitempty" form:"username"`
-	Password string `json:"password,omitempty" form:"password"`
-}
 
 func postRegisterHandler(c echo.Context) error {
 	req := LoginRequestBody{}
@@ -38,13 +32,6 @@ func postRegisterHandler(c echo.Context) error {
 	// ユーザーの存在チェック
 	var count int
 
-	u, err := uuid.NewRandom()
-	if err != nil {
-		fmt.Println(err)
-		return c.String(http.StatusInternalServerError, "なんか壊れた")
-	}
-	uu := u.String()
-
 	err = db.Get(&count, "SELECT COUNT(*) FROM user WHERE name=?", req.Username)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, fmt.Sprintf("db error: %v", err))
@@ -54,7 +41,7 @@ func postRegisterHandler(c echo.Context) error {
 		return c.String(http.StatusConflict, "ユーザーが既に存在しています")
 	}
 
-	_, err = db.Exec("INSERT INTO user (id,name, password) VALUES (?,?, ?)", uu, req.Username, hashedPass)
+	_, err = db.Exec("INSERT INTO user (name, password) VALUES (?, ?)", req.Username, hashedPass)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, fmt.Sprintf("db error: %v", err))
 	}
