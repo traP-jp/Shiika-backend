@@ -14,8 +14,8 @@ import (
 func getSimonokuHandler(c echo.Context) error {
 	id := c.Param("kaminoku_id")
 
-	var list []Simonoku
-	if err := db.Select(&list, "SELECT * FROM simonoku WHERE kaminokuid =?", id); errors.Is(err, sql.ErrNoRows) {
+	var list []TankaRes
+	if err := db.Select(&list, "SELECT simonoku.id,name as simonoku,content AS kaminoku,kaminoku.userid AS kaminokuuser,simonoku.userid AS simonokuuser FROM simonoku JOIN kaminoku ON kaminoku.id = simonoku.kaminokuid WHERE kaminokuid =?", id); errors.Is(err, sql.ErrNoRows) {
 		return echo.NewHTTPError(http.StatusNotFound, "error...")
 	} else if err != nil {
 		log.Fatalf("DB Error: %s", err)
@@ -52,7 +52,7 @@ func postSimonokuHandler(c echo.Context) error {
 func getAllSimonokuHandler(c echo.Context) error {
 
 	var list []TankaRes
-	if err := db.Select(&list, "SELECT * FROM simonoku"); errors.Is(err, sql.ErrNoRows) {
+	if err := db.Select(&list, "SELECT simonoku.id,name as simonoku,content AS kaminoku,kaminoku.userid AS kaminokuuser,simonoku.userid AS simonokuuser FROM simonoku JOIN kaminoku ON kaminoku.id = simonoku.kaminokuid"); errors.Is(err, sql.ErrNoRows) {
 		return echo.NewHTTPError(http.StatusNotFound, "error...")
 	} else if err != nil {
 		log.Fatalf("DB Error: %s", err)

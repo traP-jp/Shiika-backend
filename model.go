@@ -9,14 +9,8 @@ type Kaminoku struct {
 	Content string `json:"name,omitempty" db:"content"`
 	Userid  string `json:"userid,omitempty" db:"userid"`
 }
-type Simonoku struct {
-	Id         string `json:"id,omitempty" db:"id"`
-	Content    string `json:"name,omitempty" db:"name"`
-	KaminokuId string `json:"kaminokuid,omitempty" db:"kaminokuid"`
-	Userid     string `json:"userid,omitempty" db:"userid"`
-}
 type LoginRequestBody struct {
-	Username string `json:"username,omitempty" form:"username"`
+	Username string `json:"userid,omitempty" form:"username"`
 	Password string `json:"password,omitempty" form:"password"`
 }
 
@@ -32,8 +26,8 @@ type SimonokuReq struct {
 
 type TankaRes struct {
 	Id           string `json:"id,omitempty" db:"id"`
-	Kaminoku     string `json:"name,omitempty" db:"kaminoku"`
+	Kaminoku     string `json:"kaminoku,omitempty" db:"kaminoku"`
 	KaminokuUser string `json:"kaminokuuser,omitempty" db:"kaminokuuser"`
-	Simonoku     string `json:"kaminokuid,omitempty"  db:"simonoku"`
+	Simonoku     string `json:"simonoku,omitempty"  db:"simonoku"`
 	SimonokuUser string `json:"simonokuuser,omitempty" db:"simonokuuser"`
 }

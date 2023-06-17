@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -11,28 +10,26 @@ import (
 )
 
 func getUserKaminokuHandler(c echo.Context) error {
-	cityName := c.Param("cityName")
-	fmt.Println(cityName)
+	id := c.Param("user_id")
 
-	var test User
-	if err := db.Get(&test, "SELECT * FROM user WHERE name='ramdos'"); errors.Is(err, sql.ErrNoRows) {
-		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("No such city Name = %s", cityName))
+	var kaminoku []Kaminoku
+	if err := db.Select(&kaminoku, "SELECT * FROM kaminoku WHERE userid =?", id); errors.Is(err, sql.ErrNoRows) {
+		return echo.NewHTTPError(http.StatusNotFound, "error...")
 	} else if err != nil {
 		log.Fatalf("DB Error: %s", err)
 	}
 
-	return c.JSON(http.StatusOK, test.Password)
+	return c.JSON(http.StatusOK, kaminoku)
 }
 func getUserSimonokuHandler(c echo.Context) error {
-	cityName := c.Param("cityName")
-	fmt.Println(cityName)
+	id := c.Param("user_id")
 
-	var test User
-	if err := db.Get(&test, "SELECT * FROM user WHERE name='ramdos'"); errors.Is(err, sql.ErrNoRows) {
-		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("No such city Name = %s", cityName))
+	var list []TankaRes
+	if err := db.Select(&list, "SELECT simonoku.id,name as simonoku,content AS kaminoku,kaminoku.userid AS kaminokuuser,simonoku.userid AS simonokuuser FROM simonoku JOIN kaminoku ON kaminoku.id = simonoku.kaminokuid WHERE simonoku.userid =?", id); errors.Is(err, sql.ErrNoRows) {
+		return echo.NewHTTPError(http.StatusNotFound, "error...")
 	} else if err != nil {
 		log.Fatalf("DB Error: %s", err)
 	}
 
-	return c.JSON(http.StatusOK, test.Password)
+	return c.JSON(http.StatusOK, list)
 }
