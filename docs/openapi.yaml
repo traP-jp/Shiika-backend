@@ -1,0 +1,288 @@
+openapi: '3.0.2'
+
+info:
+  title: Shiika
+  description: |
+    This is a sample knoQ server.
+  version: 2.1.5
+
+servers:
+  - url: http://siika
+    description: for production
+
+tags:
+  - name: login
+    description: for login and register
+  - name: kaminoku
+    description: related to kaminoku
+  - name: simonoku(tanka)
+    description: related to simonoku
+  - name: user
+    description: related to user
+
+paths:
+  /login:
+    post:
+      tags:
+        - login
+      operationId: postLogin
+      summary: send user name and password for login
+      description: send user name and password for login
+      requestBody:
+        $ref: '#/components/requestBodies/Login'
+      responses:
+        '201':
+          $ref: '#/components/responses/Nocontent'
+        '400':
+          description: Bad Request
+
+  /register:
+    post:
+      tags:
+        - login
+      operationId: postRegister
+      summary: send user name and password for sign up 
+      description: send user name and password for sign up 
+      requestBody:
+        $ref: '#/components/requestBodies/Login'
+      responses:
+        '201':
+          $ref: '#/components/responses/Nocontent'
+        '400':
+          description: Bad Request
+          
+  /kaminoku:
+    get:
+      tags:
+        - kaminoku
+      operationId: getKaminoku
+      summary: get random kaminokus
+      description: get kaminoku array
+      responses:
+        '200':
+          $ref: '#/components/responses/kaminokus'
+    post:
+      tags:
+        - kaminoku
+      operationId: postKaminoku
+      summary: send kaminoku content
+      description: send kaminoku content
+      requestBody:
+        $ref: '#/components/requestBodies/kaminoku'
+      responses:
+        '201':
+          $ref: '#/components/responses/Nocontent'
+        '401':
+          description: Unorthorized  
+          
+      
+  /kaminoku/{kaminoku_id}:
+    parameters:
+      - $ref: '#/components/parameters/kaminoku_id'
+    get:
+      tags:
+        - kaminoku
+      operationId: getKaminokuDetail
+      summary: get a kaminoku by id
+      description: get a kaminoku by id
+      responses:
+        '200':
+          $ref: '#/components/responses/kaminoku'
+        '400':
+          description: Bad Request
+          
+          
+  /kaminoku/{kaminoku_id}/simonoku:
+    parameters:
+      - $ref: '#/components/parameters/kaminoku_id'
+    get:
+      tags:
+        - simonoku(tanka)
+      responses:
+        '200':
+          $ref: '#/components/responses/tanka'
+    post:
+      tags:
+        - simonoku(tanka)
+      requestBody:
+        $ref: '#/components/requestBodies/simonoku'
+      responses:
+        '201':
+          $ref: '#/components/responses/Nocontent'
+        '401':
+          description: Unorthorized
+          
+  /simonoku:
+    get:
+      tags:
+        - simonoku(tanka)
+      responses:
+        '200':
+          $ref: '#/components/responses/tankas'
+  /user/{user_name}/kaminoku:
+    parameters:
+      - $ref: '#/components/parameters/user_name'
+    get:
+      tags:
+        - user
+      responses:
+        '200':
+          $ref: '#/components/responses/kaminokus'
+  /user/{user_name}/simonoku:
+    parameters:
+      - $ref: '#/components/parameters/user_name'
+    get:
+      tags:
+        - user
+      responses:
+        '200':
+          $ref: '#/components/responses/tankas'
+    
+      
+components:
+  schemas:
+    Login:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          
+    RequestKaminoku:
+      type: object
+      properties:
+        content:
+          type: string
+          
+    ResponseKaminoku:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        content:
+          type: string
+        username:
+          type: string
+          
+    RequestSimonoku:
+      type: object
+      properties:
+        content:
+          type: string
+          
+    ResponseSimonoku:
+      description: |
+        only for ResponseTanka, no api returns this 
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        content:
+          type: string
+        kaminokuid:
+          type: string
+          format: uuid
+        username:
+          type: string
+  
+    ResponseTanka:
+      type: object
+      properties:
+        kaminoku:
+          $ref: '#/components/schemas/ResponseKaminoku'
+        simonoku:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseSimonoku'
+  requestBodies:
+    Login:
+      description: for login
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Login'
+            
+    kaminoku:
+      description: post kaminoku
+      required: true
+      content:
+        application/json:
+          schema: 
+            $ref: '#/components/schemas/RequestKaminoku'
+            
+    simonoku:
+      description: post simonoku
+      required: true
+      content:
+        application/json:
+          schema: 
+            $ref: '#/components/schemas/RequestSimonoku'
+
+  responses:
+    Nocontent:
+      description: Nocontent
+
+    kaminokus:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ResponseKaminoku'
+              
+    kaminoku:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseKaminoku'
+
+    tankas:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ResponseTanka'
+              
+    tanka:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseTanka'
+    
+          
+
+  parameters:
+    session:
+      name: session
+      in: cookie
+      required: true
+      schema:
+        type: string
+        
+    kaminoku_id:
+      name: kaminoku_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        
+    user_name:
+      name: user_name
+      in: path
+      required: true
+      schema:
+        type: string
+        
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
