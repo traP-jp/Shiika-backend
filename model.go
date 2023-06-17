@@ -10,7 +10,7 @@ type Kaminoku struct {
 	Userid  string `json:"userid,omitempty" db:"userid"`
 }
 type LoginRequestBody struct {
-	Username string `json:"userid,omitempty" form:"username"`
+	Username string `json:"userid,omitempty" form:"userid"`
 	Password string `json:"password,omitempty" form:"password"`
 }
 

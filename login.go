@@ -15,11 +15,11 @@ func postRegisterHandler(c echo.Context) error {
 	c.Bind(&req)
 
 	// もう少し真面目にバリデーションするべき
-	if req.Password == "" {
+	if req.Username == "" {
 		// エラーは真面目に返すべき
 		return c.String(http.StatusBadRequest, "nameが空です")
 	}
-	if req.Username == "" {
+	if req.Password == "" {
 		// エラーは真面目に返すべき
 		return c.String(http.StatusBadRequest, "passが空です")
 	}
@@ -57,7 +57,10 @@ func postLoginHandler(c echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusInternalServerError, fmt.Sprintf("db error: %v", err))
 	}
+	hashedPass, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 
+	fmt.Println(hashedPass)
+	fmt.Println([]byte(user.Password))
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if err != nil {
 		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {

@@ -37,13 +37,13 @@ func postKaminokuHandler(c echo.Context) error {
 	u, err := uuid.NewRandom()
 	if err != nil {
 		fmt.Println(err)
-		return c.String(http.StatusInternalServerError, "なんか壊れた")
+		return c.String(http.StatusInternalServerError, "uuidの生成に失敗しました")
 	}
 	uu := u.String()
 
 	_, derr := db.Exec("INSERT INTO kaminoku (id,content,userid) VALUES (?, ?, ?)", uu, data.Content, c.Get("userName").(string))
 	if derr != nil {
-		log.Fatalf("failed to insert city data: %s", err)
+		log.Fatalf("failed to insert data: %s", err)
 	}
 
 	return c.NoContent(http.StatusCreated)
