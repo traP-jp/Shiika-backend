@@ -13,14 +13,17 @@ import (
 
 func getKaminokuHandler(c echo.Context) error {
 
-	var list []Kaminoku
+	var list []Kaminokudb
 	if err := db.Select(&list, "SELECT * FROM kaminoku"); errors.Is(err, sql.ErrNoRows) {
 		return echo.NewHTTPError(http.StatusNotFound, "error")
 	} else if err != nil {
 		log.Fatalf("DB Error: %s", err)
 	}
-
-	return c.JSON(http.StatusOK, list)
+	var res []Kaminoku
+	for _, k := range list {
+		res = append(res, Kaminoku{Id: k.Id, Content: Fsf{k.First, k.Second, k.Third}, Userid: k.Userid})
+	}
+	return c.JSON(http.StatusOK, res)
 }
 
 func postKaminokuHandler(c echo.Context) error {
@@ -41,7 +44,7 @@ func postKaminokuHandler(c echo.Context) error {
 	}
 	uu := u.String()
 
-	_, derr := db.Exec("INSERT INTO kaminoku (id,content,userid) VALUES (?, ?, ?)", uu, data.Content, c.Get("userName").(string))
+	_, derr := db.Exec("INSERT INTO kaminoku (id,first,second,third,userid) VALUES (?, ?,?,?, ?)", uu, data.Content.First, data.Content.Second, data.Content.Third, c.Get("userName").(string))
 	if derr != nil {
 		log.Fatalf("failed to insert data: %s", err)
 	}
@@ -52,12 +55,14 @@ func getKaminokuDetailHandler(c echo.Context) error {
 	id := c.Param("kaminoku_id")
 	fmt.Println("test")
 
-	var kaminoku Kaminoku
-	if err := db.Get(&kaminoku, "SELECT * FROM kaminoku WHERE id =?", id); errors.Is(err, sql.ErrNoRows) {
+	var kami Kaminokudb
+	if err := db.Get(&kami, "SELECT * FROM kaminoku WHERE id =?", id); errors.Is(err, sql.ErrNoRows) {
 		return echo.NewHTTPError(http.StatusNotFound, "error...")
 	} else if err != nil {
 		log.Fatalf("DB Error: %s", err)
 	}
 
-	return c.JSON(http.StatusOK, kaminoku)
+	res := Kaminoku{Id: kami.Id, Content: Fsf{kami.First, kami.Second, kami.Third}, Userid: kami.Userid}
+
+	return c.JSON(http.StatusOK, res)
 }

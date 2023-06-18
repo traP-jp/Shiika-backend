@@ -14,14 +14,29 @@ import (
 func getSimonokuHandler(c echo.Context) error {
 	id := c.Param("kaminoku_id")
 
-	var list []TankaRes
-	if err := db.Select(&list, "SELECT simonoku.id,name as simonoku,content AS kaminoku,kaminoku.userid AS kaminokuuser,simonoku.userid AS simonokuuser FROM simonoku JOIN kaminoku ON kaminoku.id = simonoku.kaminokuid WHERE kaminokuid =?", id); errors.Is(err, sql.ErrNoRows) {
+	var list []Simonokudb
+	if err := db.Select(&list, "SELECT simonoku.id as simonokuid ,kaminoku.id as kaminokuid,first,second,third,fourth,fifth,kaminoku.userid as kaminokuuser, simonoku.userid as simonokuuser FROM simonoku JOIN kaminoku ON kaminoku.id = simonoku.kaminokuid WHERE kaminokuid =?", id); errors.Is(err, sql.ErrNoRows) {
 		return echo.NewHTTPError(http.StatusNotFound, "error...")
 	} else if err != nil {
 		log.Fatalf("DB Error: %s", err)
 	}
+	var res []TankaRes
+	for _, k := range list {
+		res = append(res, TankaRes{
+			Kaminoku: Kaminoku{
+				Id:      k.Kaminokuid,
+				Content: Fsf{k.First, k.Second, k.Third},
+				Userid:  k.Kaminokuuserid,
+			},
+			Simonoku: Simonoku{
+				Id:      k.Simonokuid,
+				Content: Ss{k.Fourth, k.Fifth},
+				Userid:  k.Simonokuuserid,
+			},
+		})
+	}
 
-	return c.JSON(http.StatusOK, list)
+	return c.JSON(http.StatusOK, res)
 }
 
 func postSimonokuHandler(c echo.Context) error {
@@ -42,7 +57,7 @@ func postSimonokuHandler(c echo.Context) error {
 	}
 	uu := u.String()
 	un := c.Get("userName").(string)
-	_, derr := db.Exec("INSERT INTO simonoku (id,name,kaminokuid,userid) VALUES (?, ?, ?,?)", uu, data.Content, c.Param("kaminoku_id"), un)
+	_, derr := db.Exec("INSERT INTO simonoku (id,fourth,fifth,kaminokuid,userid) VALUES (?, ?,?, ?,?)", uu, data.Content.Fourth, data.Content.Fifth, c.Param("kaminoku_id"), un)
 	if derr != nil {
 		log.Fatalf("failed to insert data: %s", err)
 	}
@@ -51,12 +66,27 @@ func postSimonokuHandler(c echo.Context) error {
 }
 func getAllSimonokuHandler(c echo.Context) error {
 
-	var list []TankaRes
-	if err := db.Select(&list, "SELECT simonoku.id,name as simonoku,content AS kaminoku,kaminoku.userid AS kaminokuuser,simonoku.userid AS simonokuuser FROM simonoku JOIN kaminoku ON kaminoku.id = simonoku.kaminokuid"); errors.Is(err, sql.ErrNoRows) {
+	var list []Simonokudb
+	if err := db.Select(&list, "SELECT simonoku.id as simonokuid ,kaminoku.id as kaminokuid,first,second,third,fourth,fifth,kaminoku.userid as kaminokuuser, simonoku.userid as simonokuuser FROM simonoku JOIN kaminoku ON kaminoku.id = simonoku.kaminokuid"); errors.Is(err, sql.ErrNoRows) {
 		return echo.NewHTTPError(http.StatusNotFound, "error...")
 	} else if err != nil {
 		log.Fatalf("DB Error: %s", err)
 	}
+	var res []TankaRes
+	for _, k := range list {
+		res = append(res, TankaRes{
+			Kaminoku: Kaminoku{
+				Id:      k.Kaminokuid,
+				Content: Fsf{k.First, k.Second, k.Third},
+				Userid:  k.Kaminokuuserid,
+			},
+			Simonoku: Simonoku{
+				Id:      k.Simonokuid,
+				Content: Ss{k.Fourth, k.Fifth},
+				Userid:  k.Simonokuuserid,
+			},
+		})
+	}
 
-	return c.JSON(http.StatusOK, list)
+	return c.JSON(http.StatusOK, res)
 }

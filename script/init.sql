@@ -5,13 +5,16 @@ CREATE TABLE IF NOT EXISTS user (name text NOT NULL, password text DEFAULT NULL)
 
 CREATE TABLE  IF NOT EXISTS kaminoku (
   `id` varchar(36)  NOT NULL,
-  `content` text NOT NULL,
+  `first` text NOT NULL,
+  `second` text NOT NULL,
+  `third` text NOT NULL,
   `userid` text DEFAULT NULL
 )DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE  IF NOT EXISTS simonoku (
   `id` varchar(36) NOT NULL,
-  `name` text NOT NULL,
+  `fourth` text NOT NULL,
+  `fifth` text NOT NULL,
   `kaminokuid` varchar(36) DEFAULT NULL,
   `userid` text DEFAULT NULL
 )DEFAULT CHARSET=utf8mb4;

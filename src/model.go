@@ -6,7 +6,12 @@ type User struct {
 }
 type Kaminoku struct {
 	Id      string `json:"id,omitempty" db:"id"`
-	Content string `json:"name,omitempty" db:"content"`
+	Content Fsf    `json:"content,omitempty" db:"content"`
+	Userid  string `json:"userid,omitempty" db:"userid"`
+}
+type Simonoku struct {
+	Id      string `json:"id,omitempty" db:"id"`
+	Content Ss     `json:"content,omitempty" db:"content"`
 	Userid  string `json:"userid,omitempty" db:"userid"`
 }
 type LoginRequestBody struct {
@@ -14,20 +19,45 @@ type LoginRequestBody struct {
 	Password string `json:"password,omitempty" form:"password"`
 }
 
-// for post kaminoku's request body's binding
 type KaminokuReq struct {
-	Content string `json:"content,omitempty"`
+	Content Fsf `json:"content,omitempty"`
 }
 
-// for post simonoku's request body's binding
 type SimonokuReq struct {
-	Content string `json:"content,omitempty"`
+	Content Ss `json:"content,omitempty"`
+}
+
+type Kaminokudb struct {
+	Id     string `db:"id"`
+	First  string `db:"first"`
+	Second string `db:"second"`
+	Third  string `db:"third"`
+	Userid string `db:"userid"`
+}
+type Simonokudb struct {
+	Simonokuid     string `db:"simonokuid"`
+	Kaminokuid     string `db:"kaminokuid"`
+	First          string `db:"first"`
+	Second         string `db:"second"`
+	Third          string `db:"third"`
+	Fourth         string `db:"fourth"`
+	Fifth          string `db:"fifth"`
+	Kaminokuuserid string `db:"kaminokuuser"`
+	Simonokuuserid string `db:"simonokuuser"`
+}
+
+type Fsf struct {
+	First  string `json:"first,omitempty"`
+	Second string `json:"second,omitempty"`
+	Third  string `json:"third,omitempty"`
+}
+
+type Ss struct {
+	Fourth string `json:"fourth,omitempty"`
+	Fifth  string `json:"fifth,omitempty"`
 }
 
 type TankaRes struct {
-	Id           string `json:"id,omitempty" db:"id"`
-	Kaminoku     string `json:"kaminoku,omitempty" db:"kaminoku"`
-	KaminokuUser string `json:"kaminokuuser,omitempty" db:"kaminokuuser"`
-	Simonoku     string `json:"simonoku,omitempty"  db:"simonoku"`
-	SimonokuUser string `json:"simonokuuser,omitempty" db:"simonokuuser"`
+	Kaminoku Kaminoku `json:"kaminoku,omitempty"`
+	Simonoku Simonoku `json:"simonoku,omitempty"`
 }
