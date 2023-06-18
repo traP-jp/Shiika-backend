@@ -48,7 +48,7 @@ services:
       - '80:80'
       - '443:443'
     links:
-      - app:app
+      - shiika:shiika
     environment:
       DOMAINS: 'api.shiika.trasta.dev -> http://shiika:8080'
       STAGE: 'local'
