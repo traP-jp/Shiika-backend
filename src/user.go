@@ -14,14 +14,25 @@ func getUserKaminokuHandler(c echo.Context) error {
 	id := c.Get("userName").(string)
 	fmt.Println("test")
 
-	var kami Kaminokudb
-	if err := db.Get(&kami, "SELECT * FROM kaminoku WHERE userid = ?", id); errors.Is(err, sql.ErrNoRows) {
+	var list []Kaminokudb
+	if err := db.Select(&list, "SELECT * FROM kaminoku WHERE userid = ?", id); errors.Is(err, sql.ErrNoRows) {
 		return echo.NewHTTPError(http.StatusNotFound, "error...")
 	} else if err != nil {
 		log.Fatalf("DB Error: %s", err)
 	}
 
-	res := Kaminoku{Id: kami.Id, Content: Fsf{kami.First, kami.Second, kami.Third}, Userid: kami.Userid}
+	res := []Kaminoku{}
+	for _, v := range list {
+		res = append(res, Kaminoku{
+			Id: v.Id,
+			Content: Fsf{
+				First:  v.First,
+				Second: v.Second,
+				Third:  v.Third,
+			},
+			Userid: v.Userid,
+		})
+	}
 
 	return c.JSON(http.StatusOK, res)
 }
@@ -34,7 +45,7 @@ func getUserSimonokuHandler(c echo.Context) error {
 	} else if err != nil {
 		log.Fatalf("DB Error: %s", err)
 	}
-	var res []TankaRes
+	res := []TankaRes{}
 	for _, k := range list {
 		res = append(res, TankaRes{
 			Kaminoku: Kaminoku{

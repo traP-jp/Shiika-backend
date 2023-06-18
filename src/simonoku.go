@@ -20,7 +20,7 @@ func getSimonokuHandler(c echo.Context) error {
 	} else if err != nil {
 		log.Fatalf("DB Error: %s", err)
 	}
-	var res []TankaRes
+	res := []TankaRes{}
 	for _, k := range list {
 		res = append(res, TankaRes{
 			Kaminoku: Kaminoku{
@@ -72,7 +72,7 @@ func getAllSimonokuHandler(c echo.Context) error {
 	} else if err != nil {
 		log.Fatalf("DB Error: %s", err)
 	}
-	var res []TankaRes
+	res := []TankaRes{}
 	for _, k := range list {
 		res = append(res, TankaRes{
 			Kaminoku: Kaminoku{
