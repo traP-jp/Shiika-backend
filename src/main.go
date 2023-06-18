@@ -47,10 +47,31 @@ func main() {
 	fmt.Println("conntected")
 	db = _db
 
-	create := "CREATE DATABASE IF NOT EXISTS shiika;USE shiika;CREATE TABLE IF NOT EXISTS user (name text NOT NULL, password text DEFAULT NULL)DEFAULT CHARSET=utf8mb4;CREATE TABLE  IF NOT EXISTS kaminoku (`id` varchar(36)  NOT NULL,`first` text NOT NULL,`second` text NOT NULL,`third` text NOT NULL,`userid` text DEFAULT NULL)DEFAULT CHARSET=utf8mb4;CREATE TABLE  IF NOT EXISTS simonoku (`id` varchar(36) NOT NULL,`fourth` text NOT NULL,`fifth` text NOT NULL,`kaminokuid` varchar(36) DEFAULT NULL,`userid` text DEFAULT NULL)DEFAULT CHARSET=utf8mb4;"
+	_, err = db.Exec("CREATE DATABASE IF NOT EXISTS shiika")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	_, err = db.Exec(create)
+	// shiikaデータベースを使用
+	_, err = db.Exec("USE shiika")
+	if err != nil {
+		log.Fatal(err)
+	}
 
+	// userテーブルの作成
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS user (name text NOT NULL, password text DEFAULT NULL) DEFAULT CHARSET=utf8mb4")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// kaminokuテーブルの作成
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS kaminoku (id varchar(36) NOT NULL, first text NOT NULL, second text NOT NULL, third text NOT NULL, userid text DEFAULT NULL) DEFAULT CHARSET=utf8mb4")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// simonokuテーブルの作成
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS simonoku (id varchar(36) NOT NULL, fourth text NOT NULL, fifth text NOT NULL, kaminokuid varchar(36) DEFAULT NULL, userid text DEFAULT NULL) DEFAULT CHARSET=utf8mb4")
 	if err != nil {
 		log.Fatal(err)
 	}
