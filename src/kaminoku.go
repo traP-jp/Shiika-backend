@@ -51,7 +51,7 @@ func postKaminokuHandler(c echo.Context) error {
 		log.Fatalf("failed to insert data: %s", err)
 	}
 
-	return c.NoContent(http.StatusCreated)
+	return c.String(http.StatusOK, uu)
 }
 func getKaminokuDetailHandler(c echo.Context) error {
 	id := c.Param("kaminoku_id")
