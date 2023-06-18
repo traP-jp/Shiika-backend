@@ -143,6 +143,9 @@ components:
   schemas:
     Login:
       type: object
+      required:
+        - userid
+        - password
       properties:
         userid:
           type: string
@@ -151,40 +154,83 @@ components:
           
     RequestKaminoku:
       type: object
+      required:
+        - content
       properties:
         content:
-          type: string
+          $ref: '#/components/schemas/Fsf'
           
-    ResponseKaminoku:
+    Kaminoku:
       type: object
+      required:
+        - id
+        - content
+        - userid
       properties:
         id:
           type: string
           format: uuid
         content:
+          $ref: '#/components/schemas/Fsf'
+        userid:
           type: string
+
+    Simonoku:
+      type: object
+      required:
+        - id
+        - content
+        - userid
+      properties:
+        id:
+          type: string
+          format: uuid
+        content:
+          $ref: '#/components/schemas/Ss'
         userid:
           type: string
           
     RequestSimonoku:
       type: object
+      required:
+        - content
       properties:
         content:
-          type: string
+          $ref: '#/components/schemas/Ss'
   
-    ResponseTanka:
+    Tanka:
       type: object
+      required:
+        - kaminoku
+        - simonoku
       properties:
-        id:
-          type: string
-          format: uuid
         kaminoku:
-          type: string
-        kaminokuuser:
-          type: string
+          $ref: '#/components/schemas/Kaminoku'
         simonoku:
+          $ref: '#/components/schemas/Simonoku'
+
+    Fsf:
+      type: object
+      required:
+        - first
+        - second
+        - third
+      properties:
+        first:
           type: string
-        simonokuuser:
+        second:
+          type: string
+        third:
+          type: string
+    Ss:
+      type: object
+      required:
+        - fourth
+        - fifth
+      properties:
+        fourth:
+          type: string
+        fifth:
           type: string
         
   requestBodies:
@@ -223,14 +269,14 @@ components:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/ResponseKaminoku'
+              $ref: '#/components/schemas/Kaminoku'
               
     kaminoku:
       description: successful operation
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ResponseKaminoku'
+            $ref: '#/components/schemas/Kaminoku'
 
     tankas:
       description: successful operation
@@ -239,14 +285,14 @@ components:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/ResponseTanka'
+              $ref: '#/components/schemas/Tanka'
               
     tanka:
       description: successful operation
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ResponseTanka'
+            $ref: '#/components/schemas/Tanka'
   
   parameters:
     session:
