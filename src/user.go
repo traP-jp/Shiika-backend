@@ -10,7 +10,7 @@ import (
 )
 
 func getUserKaminokuHandler(c echo.Context) error {
-	id := c.Param("user_id")
+	id := c.Get("userName").(string)
 
 	var kaminoku []Kaminoku
 	if err := db.Select(&kaminoku, "SELECT * FROM kaminoku WHERE userid =?", id); errors.Is(err, sql.ErrNoRows) {
@@ -22,7 +22,7 @@ func getUserKaminokuHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, kaminoku)
 }
 func getUserSimonokuHandler(c echo.Context) error {
-	id := c.Param("user_id")
+	id := c.Get("userName").(string)
 
 	var list []TankaRes
 	if err := db.Select(&list, "SELECT simonoku.id,name as simonoku,content AS kaminoku,kaminoku.userid AS kaminokuuser,simonoku.userid AS simonokuuser FROM simonoku JOIN kaminoku ON kaminoku.id = simonoku.kaminokuid WHERE simonoku.userid =?", id); errors.Is(err, sql.ErrNoRows) {

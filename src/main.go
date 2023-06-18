@@ -68,8 +68,8 @@ func main() {
 	withLogin.POST("/kaminoku/:kaminoku_id/simonoku", postSimonokuHandler)
 	e.GET("/simonoku", getAllSimonokuHandler)
 
-	e.GET("/user/:user_id/kaminoku", getUserKaminokuHandler)
-	e.GET("/user/:user_id/simonoku", getUserSimonokuHandler)
+	withLogin.GET("/user/kaminoku", getUserKaminokuHandler)
+	withLogin.GET("/user/simonoku", getUserSimonokuHandler)
 	e.Start(":8080")
 }
 
