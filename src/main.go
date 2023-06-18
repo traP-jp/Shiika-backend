@@ -50,8 +50,17 @@ func main() {
 		panic(err)
 	}
 
+	allowOrigin := "https://servisenmae"
+	if os.Getenv("DEVELOPMENT") == "true" {
+		allowOrigin = "http://localhost:5173"
+	}
+
 	e := echo.New()
 	e.Use(middleware.Logger())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:     []string{allowOrigin},
+		AllowCredentials: true,
+	}))
 	e.Use(session.Middleware(store))
 
 	e.POST("/login", postLoginHandler)
