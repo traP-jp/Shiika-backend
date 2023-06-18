@@ -47,6 +47,14 @@ func main() {
 	fmt.Println("conntected")
 	db = _db
 
+	create := "CREATE DATABASE IF NOT EXISTS shiika;USE shiika;CREATE TABLE IF NOT EXISTS user (name text NOT NULL, password text DEFAULT NULL)DEFAULT CHARSET=utf8mb4;CREATE TABLE  IF NOT EXISTS kaminoku (`id` varchar(36)  NOT NULL,`first` text NOT NULL,`second` text NOT NULL,`third` text NOT NULL,`userid` text DEFAULT NULL)DEFAULT CHARSET=utf8mb4;CREATE TABLE  IF NOT EXISTS simonoku (`id` varchar(36) NOT NULL,`fourth` text NOT NULL,`fifth` text NOT NULL,`kaminokuid` varchar(36) DEFAULT NULL,`userid` text DEFAULT NULL)DEFAULT CHARSET=utf8mb4;"
+
+	_, err = db.Exec(create)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	store, err := mysqlstore.NewMySQLStoreFromConnection(db.DB, "sessions", "/", 60*60*24*14, []byte("secret-token"))
 	if err != nil {
 		panic(err)
