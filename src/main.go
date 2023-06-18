@@ -47,17 +47,6 @@ func main() {
 	fmt.Println("conntected")
 	db = _db
 
-	_, err = db.Exec("CREATE DATABASE IF NOT EXISTS shiika")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// shiikaデータベースを使用
-	_, err = db.Exec("USE shiika")
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	// userテーブルの作成
 	_, err = db.Exec("CREATE TABLE IF NOT EXISTS user (name text NOT NULL, password text DEFAULT NULL) DEFAULT CHARSET=utf8mb4")
 	if err != nil {
