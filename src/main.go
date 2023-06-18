@@ -70,7 +70,7 @@ func main() {
 		panic(err)
 	}
 
-	allowOrigin := "https://shiika.trasta.dev"
+	allowOrigin := "https://shiika.trap.show"
 	if os.Getenv("DEVELOPMENT") == "true" {
 		allowOrigin = "http://localhost:5173"
 	}
