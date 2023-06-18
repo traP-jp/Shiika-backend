@@ -21,6 +21,7 @@ var (
 )
 
 func main() {
+	println("start working!!\n")
 	jst, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
 		log.Fatal(err)
