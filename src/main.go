@@ -80,6 +80,7 @@ func main() {
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{allowOrigin},
 		AllowCredentials: true,
+		AllowMethods:     []string{"GET", "POST", "PUT", "OPTIONS"},
 	}))
 	e.Use(session.Middleware(store))
 
