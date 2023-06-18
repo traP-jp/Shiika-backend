@@ -19,7 +19,9 @@ func getKaminokuHandler(c echo.Context) error {
 	} else if err != nil {
 		log.Fatalf("DB Error: %s", err)
 	}
-	var res []Kaminoku
+
+	res := []Kaminoku{}
+	println("updated\n")
 	for _, k := range list {
 		res = append(res, Kaminoku{Id: k.Id, Content: Fsf{k.First, k.Second, k.Third}, Userid: k.Userid})
 	}
