@@ -4,5 +4,6 @@ WORKDIR /src
 COPY ./src /src
 
 RUN go mod tidy \
-  && go build -o ./main \
-  && ./main
+  && go build -o ./main 
+
+CMD [ "./main" ]
